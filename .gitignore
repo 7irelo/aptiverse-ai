@@ -1,0 +1,73 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+
+# Virtual Environments
+venv/
+.env/
+env/
+.venv/
+ENV/
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
+
+# Jupyter Notebooks (if used)
+.ipynb_checkpoints/
+*.ipynb
+
+# AI/ML Models & Data (Exclude large files)
+*.pth
+*.h5
+*.pt
+*.bin
+*.onnx
+*.joblib
+*.pickle
+*.npz
+*.npy
+/data/
+/models/
+/downloads/
+/tmp/
+
+# Logs & Outputs
+logs/
+*.log
+mlruns/  # MLflow logs
+
+# Environment & Secrets
+.env
+*.env
+secrets.json
+config.json
+credentials.*
+.DS_Store
+
+# Build & Distribution
+/dist/
+/build/
+/out/
+*.egg-info/
+
+# FastAPI-specific (if using SQL databases)
+*.db
+*.sqlite
+/migrations/
+
+# Docker (if applicable)
+docker-compose.yml
+Dockerfile
