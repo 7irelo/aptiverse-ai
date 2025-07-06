@@ -67,7 +67,3 @@ credentials.*
 *.db
 *.sqlite
 /migrations/
-
-# Docker (if applicable)
-docker-compose.yml
-Dockerfile
