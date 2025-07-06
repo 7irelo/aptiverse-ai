@@ -1,7 +1,8 @@
+import os
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from sqlalchemy.orm import declarative_base
 
-DATABASE_URL = "postgresql+asyncpg://username:password@localhost:5432/aptiverse"
+DATABASE_URL = os.getenv("DATABASE_URL") or ""
 
 engine = create_async_engine(DATABASE_URL, echo=True)
 
