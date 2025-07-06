@@ -1,6 +1,6 @@
 from sqlalchemy.future import select
-from db import SessionLocal
-from models import University
+from .db import SessionLocal
+from .models import University
 
 async def get_university_data():
     async with SessionLocal() as session:
