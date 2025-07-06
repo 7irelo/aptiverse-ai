@@ -82,7 +82,7 @@ aptiverse-ai/
 ### 1. Clone & Set Up Environment
 
 ```bash
-git clone https://github.com/your-org/aptiverse-ai.git
+git clone https://github.com/7irelo/aptiverse-ai.git
 cd aptiverse-ai
 python3 -m venv venv
 source venv/bin/activate
