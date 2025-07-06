@@ -2,48 +2,43 @@
 
 The **Aptiverse AI Models** service powers the intelligence layer of the Aptiverse platform. It is a **modular FastAPI application** built with cutting-edge **Python ML and NLP libraries**, serving as the reasoning engine for understanding students’ goals, emotions, behaviors, academic struggles, and strengths.
 
-This microservice is designed to be **asynchronous, secure, and extensible**—connected to the main `.NET 8 Aptiverse API` through a **RabbitMQ-based message queue**, with fallback support for direct REST requests.
+This microservice is **asynchronous, secure, and containerized**, designed to integrate with the main `.NET 8 Aptiverse API` using **RabbitMQ**, while also supporting direct RESTful access.
 
 ---
 
 ## 🧠 What It Does
 
-The AI engine provides emotional, psychological, and academic insight, acting like a personalized tutor, counselor, and career coach for students.
+The engine acts like a digital academic coach and emotional support system for students.
 
 ### 📝 Diary & Emotion Analysis
 
-* Analyzes free-form student journaling.
-* Identifies emotion, trauma, burnout, anxiety, motivation.
-* Responds empathetically like a psychologist using NLP.
+* Detects stress, anxiety, trauma, burnout, motivation, and joy.
+* Uses NLP to respond empathetically to students' journaling.
 
 ### 🧮 Math Image Reasoning
 
-* Accepts uploaded photos of handwritten math working.
-* Extracts math steps and patterns.
-* Analyzes cognitive approach to problem-solving.
-* Identifies careless errors vs conceptual misunderstandings.
+* Processes images of handwritten math work.
+* Analyzes steps and logic using OCR + AI.
+* Identifies careless mistakes vs conceptual gaps.
 
 ### 🎯 Goal Feasibility & Career Planning
 
-* Students input goals (e.g., “study medicine at UCT”).
-* Models check academic history vs university requirements.
-* Advises on realistic steps, timeframes, and progress.
-* Recommends alternate options when needed.
+* Cross-checks learner goals against university requirements.
+* Provides realistic academic plans or alternative routes.
 
-### 📊 Academic Reports & Recommendations
+### 📊 Academic Reports
 
-* Models collaborate like a neural reasoning graph.
-* Produce teacher/parent reports (with privacy protections).
-* Suggest academic interventions based on risk and performance.
+* Generates student risk/performance profiles for teachers and guardians.
+* Collaborates across models for holistic insights.
 
-### 🧪 Auto-Generated Tests
+### 🧪 Practice Test Generator
 
-* Generates personalized practice tests from past SA exam papers.
-* Custom difficulty and topic targeting.
+* Builds custom tests using South African past papers.
+* Supports targeted practice by subject and difficulty.
 
-### 🏅 Reward System Engine
+### 🏅 Rewards System
 
-* Students are rewarded with premium features for consistency and goal achievement.
+* Encourages learner progress through gamified incentives and rewards.
 
 ---
 
@@ -52,13 +47,11 @@ The AI engine provides emotional, psychological, and academic insight, acting li
 | Layer            | Technology                                                                                |
 | ---------------- | ----------------------------------------------------------------------------------------- |
 | API Framework    | FastAPI (Python)                                                                          |
-| ML/NLP Libraries | `scikit-learn`, `transformers`, `pandas`, `matplotlib`, `cv2`, `torch`, `spaCy`, `Pillow` |
-| Model Serving    | Custom PyTorch/Sklearn models, HuggingFace pipelines                                      |
-| Image Analysis   | OpenCV + custom handwriting segmentation                                                  |
-| Emotion Models   | DistilBERT fine-tuned for emotion/mental health                                           |
-| Data Sources     | PostgreSQL, CSV (admissions data), OCR                                                    |
-| Message Queue    | RabbitMQ (via Aptiverse Worker)                                                           |
-| DevOps           | Uvicorn, Docker, GitHub Actions                                                           |
+| ML/NLP Libraries | `transformers`, `pandas`, `scikit-learn`, `cv2`, `torch`, `spaCy`, `matplotlib`, `Pillow` |
+| Storage          | PostgreSQL, CSV                                                                           |
+| OCR              | OpenCV                                                                                    |
+| Messaging        | RabbitMQ (via `.NET 8` Worker)                                                            |
+| DevOps           | Docker, GitHub Actions, Uvicorn                                                           |
 
 ---
 
@@ -67,42 +60,24 @@ The AI engine provides emotional, psychological, and academic insight, acting li
 ```bash
 aptiverse-ai/
 ├── app/
-│   ├── main.py                      # FastAPI entry point
-│   ├── api/                         # Route handlers
-│   │   ├── diary.py                 # /diary endpoint
-│   │   ├── math_image.py           # /math-image endpoint
-│   │   ├── goals.py                # /goals endpoint
-│   │   ├── report.py               # /report endpoint
-│   │   └── reward.py               # /reward endpoint
-│   ├── models/                     # Core AI/ML logic
-│   │   ├── diary_model.py          # Emotion/Trauma NLP model
-│   │   ├── math_model.py           # Image-based math reasoning
-│   │   ├── goal_model.py           # Goal feasibility logic
-│   │   ├── test_gen_model.py       # Test generation engine
-│   │   ├── recommender.py          # Strength/weakness analysis
-│   │   └── orchestrator.py         # Coordinates cross-model logic
-│   ├── schemas/                    # Pydantic data contracts
-│   │   ├── diary.py
-│   │   ├── goals.py
-│   │   └── report.py
-│   ├── data/
-│   │   ├── db.py                   # SQLAlchemy engine & session
-│   │   ├── models.py              # SQLAlchemy table definitions (e.g., University)
-│   │   └── universities.py        # University data loader (from DB)
-│   ├── ml_artifacts/               # Pretrained/fine-tuned models
-│   ├── services/
-│   │   └── utils.py                # Shared helpers
-│   └── config.py                   # Environment + DB config
-├── tests/
-│   ├── test_diary.py
-│   └── test_math.py
-├── requirements.txt
+│   ├── main.py                  # FastAPI entrypoint
+│   ├── api/                     # Routes (diary, goals, math, reports)
+│   ├── models/                  # AI/ML models
+│   ├── schemas/                 # Pydantic schemas
+│   ├── data/                    # DB access + admissions logic
+│   ├── services/                # Utility functions
+│   └── config.py                # Env + database settings
+├── ml_artifacts/               # Saved/fine-tuned model weights
+├── tests/                      # Unit tests
+├── requirements.txt            # Python dependencies
+├── Dockerfile                  # Docker container build file
+├── docker-compose.yml          # Dev container + DB setup
 └── README.md
 ```
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Getting Started (Local)
 
 ### 1. Clone & Set Up Environment
 
@@ -114,50 +89,90 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 2. Start Local Dev Server
+### 2. Start Development Server
 
 ```bash
 uvicorn app.main:app --reload
 ```
 
-Access the docs:
-👉 `http://localhost:8000/docs`
+Navigate to:
+👉 `http://localhost:8000/docs` — interactive Swagger UI
+
+---
+
+## 🐳 Running in Docker
+
+### Build and Run Container
+
+```bash
+docker build -t aptiverse-ai .
+docker run -p 8000:8000 aptiverse-ai
+```
+
+### Or use Docker Compose (includes PostgreSQL)
+
+```yaml
+# docker-compose.yml
+version: "3.9"
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@db:5432/aptiverse
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: aptiverse
+    ports:
+      - "5432:5432"
+```
+
+Then run:
+
+```bash
+docker-compose up --build
+```
 
 ---
 
 ## 🔌 Integration Channels
 
-This AI service can be accessed by:
+This AI microservice can be accessed via:
 
-* ✅ **Aptiverse Worker** (.NET 8 service via RabbitMQ)
-* 🔁 Optional fallback: direct `HTTP POST` from Aptiverse API
-* 🧠 Internal model orchestrator via Python function calls
-
----
-
-## 🔍 API Examples
-
-| Endpoint            | Method | Description                           |
-| ------------------- | ------ | ------------------------------------- |
-| `/diary/analyze`    | POST   | Emotion + NLP response generation     |
-| `/math-image/solve` | POST   | Extracts + reasons about math steps   |
-| `/goals/evaluate`   | POST   | Goal feasibility vs real-world data   |
-| `/report/generate`  | POST   | Student performance & risk report     |
-| `/test/generate`    | POST   | Personalized academic test generation |
+* ✅ **Aptiverse Worker** (.NET 8 service over RabbitMQ)
+* 🔁 Optional direct REST calls (`POST`, `GET`)
+* ⚙️ Internal Python calls via orchestrator module
 
 ---
 
-## 🧠 Example Use Case
+## 🔍 API Highlights
 
-**Input:**
+| Endpoint            | Method | Purpose                              |
+| ------------------- | ------ | ------------------------------------ |
+| `/diary/analyze`    | POST   | Analyze emotion from student journal |
+| `/math-image/solve` | POST   | Process handwritten math logic       |
+| `/goals/evaluate`   | POST   | Assess goal feasibility              |
+| `/report/generate`  | POST   | Generate holistic academic report    |
+| `/test/generate`    | POST   | Personalized test from curriculum    |
+
+---
+
+## 🧠 Example Request
 
 ```json
 {
-  "text": "I feel overwhelmed by my math work. I keep trying but always fail."
+  "text": "I feel overwhelmed by my math work. I try hard, but I still fail."
 }
 ```
 
-**Output:**
+Response:
 
 ```json
 {
@@ -165,7 +180,7 @@ This AI service can be accessed by:
     { "label": "frustrated", "score": 0.91 },
     { "label": "sad", "score": 0.76 }
   ],
-  "response": "It’s okay to feel this way. You’re not alone. Let’s look at what’s causing the frustration and how we can break it down."
+  "response": "It's okay to feel this way. You're not alone. Let's break down the challenges together."
 }
 ```
 
@@ -173,11 +188,13 @@ This AI service can be accessed by:
 
 ## 🧪 Testing
 
+Run all unit tests:
+
 ```bash
 pytest tests/
 ```
 
-Run with coverage:
+Or with coverage:
 
 ```bash
 coverage run -m pytest
@@ -186,43 +203,35 @@ coverage report
 
 ---
 
-## 🐳 Docker
-
-```bash
-docker build -t aptiverse-ai .
-docker run -p 8000:8000 aptiverse-ai
-```
-
----
-
 ## 🔮 Future Directions
 
-* Model self-evaluation and retraining with collected feedback
-* Integration with GPT-based summarization + fine-tuned LLMs
-* Integration with SA Dept. of Education curriculum database
-* Voice-based input for diary & spoken test generation
-* OpenAPI + gRPC hybrid model serving
+* GPT-based student feedback generation
+* Embedding search across curriculum topics
+* gRPC + WebSocket support for live chat scenarios
+* Voice input + mobile-first model endpoints
+* Model evaluation + continuous training loop
 
 ---
 
 ## 🤝 Contributions
 
-This project welcomes contributors passionate about:
+We welcome contributors in:
 
-* 🧠 Mental health and education
-* 📚 NLP + ML for academic impact
-* 🤖 Ethical AI systems for underserved communities
+* Educational AI and NLP
+* Socially conscious ML systems
+* Mental health + youth support through data
+* South African curriculum innovation
 
 ---
 
-## 🛡️ Licensing
+## 🛡️ License
 
-This repository is part of **Aptiverse Labs** and subject to internal licensing until public release.
+Part of **Aptiverse Labs** — internal license. Public license coming with the open release.
 
 ---
 
 ## 🌱 Aptiverse: Grow Intelligence with Empathy
 
-> *"We don’t just analyze learners. We uplift them."*
+> *"We don’t just analyze students. We uplift them."*
 
 ---
